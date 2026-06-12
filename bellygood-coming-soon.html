@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BellyGood — Coming Soon</title>
+<meta name="description" content="Built for the life you actually live. BellyGood is coming soon."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream:      #F0F7E8;
+    --cream-deep: #E6F1D8;
+    --green-mid:  #639922;
+    --green-bright:#7DB534;
+    --green-dark: #27500A;
+    --green-deep: #16300A;
+    --green-lite: #C0DD97;
+    --ink:        #1C2912;
+    --muted:      #54713A;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── Background blobs ── */
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bg svg { width: 100%; height: 100%; display: block; }
+
+  @keyframes drift1 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(8px,-12px) rotate(2deg); } }
+  @keyframes drift2 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-10px,9px) rotate(-2deg); } }
+  @keyframes drift3 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(6px,10px) rotate(1.5deg); } }
+
+  .drift-a { animation: drift1 11s ease-in-out infinite; transform-origin: center; }
+  .drift-b { animation: drift2 14s ease-in-out infinite; transform-origin: center; }
+  .drift-c { animation: drift3 17s ease-in-out infinite; transform-origin: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drift-a, .drift-b, .drift-c { animation: none; }
+  }
+
+  /* ── Layout ── */
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem 4.5rem;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--green-dark);
+    margin-bottom: 2.25rem;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    width: 36px;
+    height: 1px;
+    background: var(--green-mid);
+    opacity: 0.5;
+  }
+
+  .wordmark {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(3.4rem, 11vw, 7rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--green-deep);
+    margin-bottom: 1.5rem;
+  }
+  .wordmark .good {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--green-mid);
+    position: relative;
+  }
+  .wordmark .good::after {
+    content: '';
+    position: absolute;
+    left: 2%;
+    bottom: -0.08em;
+    width: 96%;
+    height: 0.13em;
+    background: var(--green-lite);
+    border-radius: 99px;
+    z-index: -1;
+    transform: rotate(-1.2deg);
+  }
+
+  .tagline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    color: var(--green-dark);
+    line-height: 1.4;
+    max-width: 26ch;
+    margin-bottom: 0.75rem;
+  }
+
+  .sub {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-bottom: 3.25rem;
+  }
+
+  /* ── Email capture ── */
+  .capture {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    background: #fff;
+    border: 1.5px solid rgba(39,80,10,0.16);
+    border-radius: 99px;
+    padding: 5px;
+    box-shadow: 0 6px 28px rgba(39,80,10,0.10);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .capture:focus-within {
+    border-color: var(--green-mid);
+    box-shadow: 0 6px 32px rgba(99,153,34,0.18);
+  }
+  .capture input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    padding: 0.65rem 1.1rem;
+  }
+  .capture input::placeholder { color: var(--muted); opacity: 0.65; }
+  .capture button {
+    flex-shrink: 0;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: var(--green-deep);
+    border-radius: 99px;
+    padding: 0.7rem 1.5rem;
+    transition: background 0.18s, transform 0.12s;
+  }
+  .capture button:hover { background: var(--green-dark); }
+  .capture button:active { transform: scale(0.97); }
+
+  .privacy-note {
+    margin-top: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .success {
+    display: none;
+    width: 100%;
+    max-width: 440px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    background: #fff;
+    border: 1.5px solid rgba(99,153,34,0.3);
+    border-radius: 99px;
+    padding: 0 1.25rem 0 0.5rem;
+    height: 52px;
+    box-shadow: 0 6px 28px rgba(39,80,10,0.10);
+  }
+  .success-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .success p { font-size: 0.9rem; color: var(--green-dark); }
+  .success strong { font-weight: 500; color: var(--green-deep); }
+
+  .footer {
+    position: fixed;
+    bottom: 1.4rem;
+    left: 0; right: 0;
+    z-index: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .eyebrow      { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) both 0.05s; }
+  .wordmark     { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) both 0.15s; }
+  .tagline      { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) both 0.27s; }
+  .sub          { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) both 0.35s; }
+  .capture-zone { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) both 0.45s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eyebrow, .wordmark, .tagline, .sub, .capture-zone { animation: none; }
+  }
+
+  @media (max-width: 520px) {
+    .capture { flex-direction: column; border-radius: 20px; gap: 6px; padding: 8px; }
+    .capture button { padding: 0.85rem 1rem; }
+    .footer { position: static; margin-top: 3.5rem; }
+    .page { padding-bottom: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background: soft tonal blobs only -->
+<div class="bg" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- corner blobs — smaller, tucked into corners -->
+    <ellipse class="drift-a" cx="0"    cy="0"   rx="220" ry="180" fill="#C0DD97" opacity="0.5"/>
+    <ellipse class="drift-b" cx="1440" cy="900" rx="260" ry="200" fill="#27500A" opacity="0.14"/>
+    <ellipse class="drift-c" cx="1440" cy="0"   rx="200" ry="160" fill="#E6F1D8" opacity="0.65"/>
+    <ellipse class="drift-a" cx="0"    cy="900" rx="180" ry="145" fill="#EAF3DE" opacity="0.55"/>
+
+    <!-- small mid accents -->
+    <ellipse class="drift-b" cx="1180" cy="480" rx="90"  ry="72"  fill="#639922" opacity="0.09"/>
+    <ellipse class="drift-c" cx="260"  cy="430" rx="80"  ry="65"  fill="#C0DD97" opacity="0.22"/>
+
+  </svg>
+</div>
+
+<main class="page">
+
+  <span class="eyebrow">Coming soon</span>
+
+  <h1 class="wordmark">Belly<span class="good">Good</span></h1>
+
+  <p class="tagline">Built for the life you actually live.</p>
+  <p class="sub">Something good is brewing.</p>
+
+  <div class="capture-zone" style="width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;">
+
+    <form class="capture" id="capture-form" onsubmit="return handleSubmit(event)">
+      <input type="email" id="email" placeholder="Enter your email" autocomplete="email" required aria-label="Email address"/>
+      <button type="submit" id="submit-btn">Notify me</button>
+    </form>
+
+    <div class="success" id="success">
+      <div class="success-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 8"/></svg>
+      </div>
+      <p><strong>You're on the list.</strong> We'll reach out when we're ready.</p>
+    </div>
+
+    <p class="privacy-note">No spam. Just one email when we launch.</p>
+
+  </div>
+
+</main>
+
+<footer class="footer">© BellyGood 2026</footer>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzn5zoVGBxnGiCfsK024E86CLe1TOZoLlIuS7GpOi4ecnWKZ-SeOCG1YaPTWdHCtEA/exec';
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) return false;
+
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
+
+    // Send as GET with URL params — avoids CORS preflight entirely
+    const params = new URLSearchParams({
+      email: email,
+      timestamp: new Date().toISOString(),
+      source: 'bellygood.in/coming-soon'
+    });
+
+    try {
+      await fetch(SHEET_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+    } catch(err) {}
+
+    // Always show confirmation regardless of fetch result
+    document.getElementById('capture-form').style.display = 'none';
+    document.querySelector('.privacy-note').style.display = 'none';
+    const s = document.getElementById('success');
+    s.style.display = 'flex';
+    s.style.animation = 'fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both';
+    return false;
+  }
+</script>
+</body>
+</html>
